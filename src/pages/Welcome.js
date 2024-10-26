@@ -1,8 +1,13 @@
-// src/pages/Login.js
+
+   // src/pages/Login.js
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-
+import "./HomeCarousel.css"; // Import custom CSS for the component
+import HomeSliderAndSearch from './HomeSlider';
+import RecommendedProperties from './RecommendedProperties';
+import Blog from './Blog';
+import Newsletter from './Newsletter';
 const Welcome = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -31,33 +36,59 @@ const Welcome = () => {
       setError('Invalid email or password');
     }
   };
-
+  const properties = [
+    {
+      image: 'images/properties-1.jpg',
+      status: 'Sale',
+      title: 'North Parchmore Street',
+      type: 'Apartment',
+      price: '$20,000',
+      description: 'Far far away, behind the word mountains, far from the countries.',
+      sqft: '250sqft',
+      bathrooms: 3,
+      bedrooms: 4,
+    },
+    {
+      image: 'images/properties-2.jpg',
+      status: 'Sale',
+      title: 'North Parchmore Street',
+      type: 'Apartment',
+      price: '$20,000',
+      description: 'Far far away, behind the word mountains, far from the countries.',
+      sqft: '250sqft',
+      bathrooms: 3,
+      bedrooms: 4,
+    },
+    {
+      image: 'images/properties-3.jpg',
+      status: 'Rent',
+      title: 'North Parchmore Street',
+      type: 'Apartment',
+      price: '$800 <small>/ month</small>',
+      description: 'Far far away, behind the word mountains, far from the countries.',
+      sqft: '250sqft',
+      bathrooms: 3,
+      bedrooms: 4,
+    },
+    {
+      image: 'images/properties-4.jpg',
+      status: 'Sale',
+      title: 'North Parchmore Street',
+      type: 'Apartment',
+      price: '$20,000',
+      description: 'Far far away, behind the word mountains, far from the countries.',
+      sqft: '250sqft',
+      bathrooms: 3,
+      bedrooms: 4,
+    },
+  ];
   return (
-    <div style={{ maxWidth: '400px', margin: '0 auto' }}>
-      <h2>Login</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Email:</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label>Password:</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-        {error && <p style={{ color: 'red' }}>{error}</p>}
-        <button type="submit">Login</button>
-      </form>
-    </div>
+    <>
+    <HomeSliderAndSearch />
+    <RecommendedProperties properties={properties} />
+    <Blog />
+    <Newsletter /> 
+    </>
   );
 };
 
