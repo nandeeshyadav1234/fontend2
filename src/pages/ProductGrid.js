@@ -36,9 +36,9 @@ const ProductGrid = () => {
       {properties.map((product) => (
         <Grid item xs={12} sm={6} md={4} lg={3} key={product.id}>
           <Card style={{ minHeight: '320px', position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-            {product.status && (
+            {(
               <Chip
-                label={product.status}
+                label={product.status??'Sale'}
                 color="secondary"
                 style={{
                   position: 'absolute',
