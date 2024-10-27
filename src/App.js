@@ -10,6 +10,7 @@ import AboutSection from './pages/About';
 import Contact from './pages/Contact';
 import ProtectedRoute from './components/ProtectedRoute'; // Your ProtectedRoute component
 import AOS from 'aos';
+import Property from './pages/Property';
 import React, { useEffect } from 'react';
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
@@ -31,6 +32,7 @@ function App() {
       <Header />
       <Routes>
         <Route path="/contact" element={<Contact />} />
+        <Route path="/property" element={<Property />} />
         <Route path="/" element={<Welcome />} />
         <Route path='/about' element={<AboutSection />} />
         <Route path="/login" element={<Login />} />
