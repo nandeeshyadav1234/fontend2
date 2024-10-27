@@ -2,42 +2,6 @@
 import React from 'react';
 import Slider from 'react-slick';
 
-// Sample product data
-const products = [
-  {
-    id: 1,
-    name: 'Product 1',
-    image: '/images/properties-1.jpg',
-    price: '$20.00',
-    description: 'This is a longer description for Product 1 that will be trimmed.',
-    status: 'Sale', // Added status
-  },
-  {
-    id: 2,
-    name: 'Product 2',
-    image: '/images/properties-2.jpg',
-    price: '$30.00',
-    description: 'Short description for Product 2.',
-    status: 'Sale', // No status
-  },
-  {
-    id: 3,
-    name: 'Product 3',
-    image: '/images/properties-3.jpg',
-    price: '$25.00',
-    description: 'Another longer description for Product 3 that will also be trimmed.',
-    status: 'Sale', // Added status
-  },
-  {
-    id: 4,
-    name: 'Product 4',
-    image: '/images/properties-4.jpg',
-    price: '$40.00',
-    description: 'This is a description for Product 4.',
-    status: 'Sale', // No status
-  },
-];
-
 // Truncate function to limit description length
 const truncateDescription = (description, maxLength) => {
   if (description.length > maxLength) {
@@ -45,8 +9,11 @@ const truncateDescription = (description, maxLength) => {
   }
   return description;
 };
-
-const ProductCarousel = () => {
+const removeHtmlTags = (htmlString) => {
+    return htmlString.replace(/<[^>]*>/g, ''); // Remove all HTML tags
+  };
+const imageURL = process.env.REACT_APP_IMAGE_PROPERTY_URL;
+const ProductCarousel = ({ products }) => { // Destructure products from props
   const settings = {
     dots: true,
     infinite: true,
@@ -76,18 +43,18 @@ const ProductCarousel = () => {
         {products.map((product) => (
           <div key={product.id} className="product-item">
             <div className="status-box">
-              {product.status && <span className="status">{product.status}</span>} {/* Sale status */}
+              {<span className="status">Sale</span>} {/* Sale status */}
             </div>
             <img
-              src={product.image}
+              src={product.images && imageURL+ JSON.parse(product.images)[0]}
               alt={product.name}
               style={{ width: '100%', height: '200px', objectFit: 'cover' }} // Maintain aspect ratio
             />
             <div className="product-info">
-              <h3 className="product-name">{product.name}</h3>
-              <p className="price">{product.price}</p>
+              <h3 className="product-name">{truncateDescription(product.name, 25)}</h3>
+              <p className="price">Rs.{product.amount} /Sq.ft</p>
             </div>
-            <p className="description">{truncateDescription(product.description, 50)}</p> {/* Trimmed description */}
+            <p className="description">{removeHtmlTags(truncateDescription(removeHtmlTags(product.description), 50))}</p> {/* Trimmed description */}
             <button className="details-button">View Details</button> {/* Details button */}
           </div>
         ))}
