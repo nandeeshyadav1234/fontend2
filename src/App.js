@@ -6,9 +6,15 @@ import Login from './pages/Login'; // Your Login page
 import Dashboard from './pages/Dashboard'; // Your Dashboard page
 import Admin from './pages/Admin'; // Your Admin page
 import Welcome from './pages/Welcome'; // Your Welcome page
+import AboutSection from './pages/About';
 import ProtectedRoute from './components/ProtectedRoute'; // Your ProtectedRoute component
 import AOS from 'aos';
 import React, { useEffect } from 'react';
+import '@fontsource/roboto/300.css';
+import '@fontsource/roboto/400.css';
+import '@fontsource/roboto/500.css';
+import '@fontsource/roboto/700.css';
+
 import 'aos/dist/aos.css'; // Import AOS styles
 function App() {
   useEffect(() => {
@@ -24,6 +30,7 @@ function App() {
       <Header />
       <Routes>
         <Route path="/" element={<Welcome />} />
+        <Route path='/about' element={<AboutSection />} />
         <Route path="/login" element={<Login />} />
         <Route path="/dashboard" element={
           <ProtectedRoute roles={['user', 'admin']}>

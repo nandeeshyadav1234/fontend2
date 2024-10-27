@@ -86,8 +86,7 @@ const Welcome = () => {
     <>
     <HomeSliderAndSearch />
     <RecommendedProperties properties={properties} />
-    <Blog />
-    <Newsletter /> 
+    <Blog /> 
     </>
   );
 };
