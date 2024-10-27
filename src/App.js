@@ -7,6 +7,7 @@ import Dashboard from './pages/Dashboard'; // Your Dashboard page
 import Admin from './pages/Admin'; // Your Admin page
 import Welcome from './pages/Welcome'; // Your Welcome page
 import AboutSection from './pages/About';
+import Contact from './pages/Contact';
 import ProtectedRoute from './components/ProtectedRoute'; // Your ProtectedRoute component
 import AOS from 'aos';
 import React, { useEffect } from 'react';
@@ -29,6 +30,7 @@ function App() {
     <Router>
       <Header />
       <Routes>
+        <Route path="/contact" element={<Contact />} />
         <Route path="/" element={<Welcome />} />
         <Route path='/about' element={<AboutSection />} />
         <Route path="/login" element={<Login />} />

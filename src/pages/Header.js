@@ -32,9 +32,9 @@ const Header = () => {
             <ul className="navbar-nav ml-auto">
               <li className="nav-item active"><Link to="/" className="nav-link">Home</Link></li>
               <li className="nav-item"><Link to="/property" className="nav-link">Property</Link></li>
-              <li className="nav-item"><Link to="/agents" className="nav-link">Agents</Link></li>
+             {/* <li className="nav-item"><Link to="/agents" className="nav-link">Agents</Link></li> */}
               <li className="nav-item"><Link to="/about" className="nav-link">About</Link></li>
-              <li className="nav-item"><Link to="/blog" className="nav-link">Blog</Link></li>
+              {/* <li className="nav-item"><Link to="/blog" className="nav-link">Blog</Link></li> */}
               <li className="nav-item"><Link to="/contact" className="nav-link">Contact</Link></li>
               <li className="nav-item cta"><Link to="/signin" className="nav-link ml-lg-2"><span className="icon-user"></span> Sign-In</Link></li>
               <li className="nav-item cta cta-colored"><Link to="/signup" className="nav-link"><span className="icon-pencil"></span> Sign-Up</Link></li>
