@@ -18,7 +18,7 @@ const products = [
     image: '/images/properties-2.jpg',
     price: '$30.00',
     description: 'Short description for Product 2.',
-    status: '', // No status
+    status: 'Sale', // No status
   },
   {
     id: 3,
@@ -34,7 +34,7 @@ const products = [
     image: '/images/properties-4.jpg',
     price: '$40.00',
     description: 'This is a description for Product 4.',
-    status: '', // No status
+    status: 'Sale', // No status
   },
 ];
 

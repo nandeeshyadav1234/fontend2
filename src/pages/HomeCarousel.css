@@ -59,7 +59,7 @@ h2.heading {
 
 .status-box {
   position: absolute; /* Positioning the status box */
-  bottom: 10px; /* Position from the bottom */
+  top: 10px; /* Position from the bottom */
   left: 10px; /* Position from the left */
   background-color: #109fd1; /* Red background for sale status */
   color: white; /* White text */
