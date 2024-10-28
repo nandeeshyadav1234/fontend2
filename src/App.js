@@ -16,7 +16,8 @@ import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
-
+import SignIn from './pages/SignIn';
+import SignUp from './pages/SignUp';
 // Check if the path is a dashboard route
 const shouldSkipHeaderFooter = (pathname) => pathname.startsWith('/admin');
 
@@ -50,8 +51,10 @@ function App() {
             <Route path="/contact" element={<Contact />} />
             <Route path="/property" element={<Property />} />
             <Route path="/" element={<Welcome />} />
+            <Route path="/signIn" element={<SignIn />} />
             <Route path='/about' element={<AboutSection />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<SignUp />} />
             <Route path="/admin/*" element={<DashboardRoutes />} /> {/* All admin routes */}
           </Routes>
         </LayoutWrapper>
