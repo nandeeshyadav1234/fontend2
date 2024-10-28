@@ -5,7 +5,7 @@ import { Typography, Grid, Paper, Box } from '@mui/material';
 const DashboardSettings = () => (
   <Box>
     <Typography variant="h4" gutterBottom>
-    DashboardSettings
+    DashboardSettingsww
     </Typography>
     <Grid container spacing={2}>
       <Grid item xs={12} md={6} lg={3}>
