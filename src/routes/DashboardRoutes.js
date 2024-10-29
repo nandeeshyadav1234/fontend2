@@ -14,6 +14,7 @@ import Plots from '../admin/pages/Plots'; // Add this page
 import House from '../admin/pages/House'; // Add this page
 import Lands from '../admin/pages/Lands'; // Add this page
 import Orders from '../admin/pages/Orders';
+
 const DashboardRoutes = () => {
   return (
     <Routes>

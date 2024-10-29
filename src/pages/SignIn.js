@@ -8,19 +8,59 @@ import {
   Container,
   Avatar,
   Paper,
+  Alert,
+  CircularProgress,
 } from '@mui/material';
 import LockIcon from '@mui/icons-material/Lock';
+import { useNavigate } from 'react-router-dom';
 
 const SignIn = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
+    const apiUrl = process.env.REACT_APP_API_URL;
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Handle sign-in logic here (e.g., API call)
-    console.log('Email:', email);
-    console.log('Password:', password);
-  };
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+
+      // Validate inputs
+      if (!email || !password) {
+        setError('Please enter both email and password.');
+        return;
+      }
+
+      setLoading(true);
+      setError('');
+
+      try {
+        const response = await fetch(`${apiUrl}auth/signin`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email, password }),
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          // Handle successful login
+          console.log('Login successful:', data);
+          localStorage.setItem('userToken', data.token); // Save token in localStorage
+          navigate('/admin'); // Redirect to the admin page
+        } else {
+          // Display error message
+          setError(data.message || 'Login failed. Please try again.');
+        }
+      } catch (error) {
+        // Handle network or other fetch errors
+        setError('An error occurred. Please try again later.');
+      } finally {
+        setLoading(false);
+      }
+    };
 
   return (
     <Container component="main" maxWidth="xs">
@@ -31,6 +71,14 @@ const SignIn = () => {
         <Typography component="h1" variant="h5">
           Sign In
         </Typography>
+
+        {/* Error Alert */}
+        {error && (
+          <Alert severity="error" sx={{ mt: 2, mb: 2 }}>
+            {error}
+          </Alert>
+        )}
+
         <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2 }}>
           <TextField
             variant="outlined"
@@ -42,6 +90,7 @@ const SignIn = () => {
             autoFocus
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            error={!!error}
           />
           <TextField
             variant="outlined"
@@ -53,6 +102,7 @@ const SignIn = () => {
             autoComplete="current-password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            error={!!error}
           />
           <Button
             type="submit"
@@ -60,8 +110,9 @@ const SignIn = () => {
             variant="contained"
             color="primary"
             sx={{ mt: 3, mb: 2 }}
+            disabled={loading}
           >
-            Sign In
+            {loading ? <CircularProgress size={24} /> : 'Sign In'}
           </Button>
           <Typography variant="body2" color="textSecondary" align="center">
             {"Don't have an account? Sign Up"}

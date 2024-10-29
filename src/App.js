@@ -18,6 +18,8 @@ import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
+import ProtectedRoute from './components/ProtectedRoute';
+import Unauthorized from './pages/Unauthorized';
 // Check if the path is a dashboard route
 const shouldSkipHeaderFooter = (pathname) => pathname.startsWith('/admin');
 
@@ -55,7 +57,12 @@ function App() {
             <Route path='/about' element={<AboutSection />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />
-            <Route path="/admin/*" element={<DashboardRoutes />} /> {/* All admin routes */}
+            <Route path="/admin/*" element={<DashboardRoutes />} />
+            {/* Protect the entire admin route */}
+            {/* <Route element={<ProtectedRoute roles={['admin']} />}>
+              <Route path="/admin/*" element={<DashboardRoutes />} />
+            </Route> */}
+            <Route path="/unauthorized" element={<Unauthorized />} />
           </Routes>
         </LayoutWrapper>
       </Router>

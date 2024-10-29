@@ -1,14 +1,15 @@
-// src/components/ProtectedRoute.js
-import { Navigate } from 'react-router-dom';
-import { isAuthenticated, getUserRole } from '../utils/auth';
-import React from "react";
-const ProtectedRoute = ({ children, roles }) => {
-  if (!isAuthenticated()) return <Navigate to="/login" />;
+import React from 'react';
+import { Navigate, Outlet } from 'react-router-dom';
 
-  const userRole = getUserRole();
-  if (roles && !roles.includes(userRole)) return <Navigate to="/unauthorized" />;
+const ProtectedRoute = ({ roles }) => {
+  const isAuthenticated = true; // Replace with your authentication logic
+  const userRole = 'user'; // Replace with your logic to get the current user's role
 
-  return children;
+  if (!isAuthenticated || (roles && !roles.includes(userRole))) {
+    return <Navigate to="/unauthorized" />;
+  }
+
+  return <Outlet />;
 };
 
 export default ProtectedRoute;

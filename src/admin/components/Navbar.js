@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { AppBar, Toolbar, Typography, IconButton, Menu, MenuItem, Avatar } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import AccountCircle from '@mui/icons-material/AccountCircle';
+import { useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -14,12 +15,21 @@ const Navbar = () => {
   const handleMenuClose = () => {
     setAnchorEl(null);
   };
-
+  const navigate = useNavigate();
   const handleLogout = () => {
-    // Logic for logout goes here
+    // Clear user token and data from localStorage or sessionStorage
+    localStorage.removeItem('userToken'); // Or sessionStorage.removeItem('userToken')
+    localStorage.removeItem('userData'); // Optional: Clear other user data if stored
+  
     console.log('User logged out');
+  
+    // Close the menu
     handleMenuClose();
+    navigate('/');
+    // Redirect to the login page or homepage
+    // window.location.href = '/login'; // Adjust URL as needed
   };
+  
 
   return (
     <AppBar position="static" color="primary">
