@@ -1,8 +1,8 @@
 // Example for src/admin/pages/Plots.js
 import React from 'react';
 
-const Lands = () => {
+const Plots = () => {
   return <div>Plots Page</div>;
 };
 
-export default Lands;
+export default Plots;

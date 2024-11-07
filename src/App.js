@@ -59,9 +59,9 @@ function App() {
             <Route path="/signup" element={<SignUp />} />
             <Route path="/admin/*" element={<DashboardRoutes />} />
             {/* Protect the entire admin route */}
-            {/* <Route element={<ProtectedRoute roles={['admin']} />}>
+            {<Route element={<ProtectedRoute roles={['admin']} />}>
               <Route path="/admin/*" element={<DashboardRoutes />} />
-            </Route> */}
+            </Route>}
             <Route path="/unauthorized" element={<Unauthorized />} />
           </Routes>
         </LayoutWrapper>

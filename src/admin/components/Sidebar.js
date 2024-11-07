@@ -80,12 +80,12 @@ const Sidebar = () => {
             <ListItem button component={Link} to="/admin/products/plots" sx={{ pl: 4, '&:hover': { backgroundColor: '#34495E' } }}>
               <ListItemText primary="Plots" sx={{ color: 'white' }} />
             </ListItem>
-            <ListItem button component={Link} to="/admin/products/house" sx={{ pl: 4, '&:hover': { backgroundColor: '#34495E' } }}>
+            {/* <ListItem button component={Link} to="/admin/products/house" sx={{ pl: 4, '&:hover': { backgroundColor: '#34495E' } }}>
               <ListItemText primary="House" sx={{ color: 'white' }} />
             </ListItem>
             <ListItem button component={Link} to="/admin/products/lands" sx={{ pl: 4, '&:hover': { backgroundColor: '#34495E' } }}>
               <ListItemText primary="Lands" sx={{ color: 'white' }} />
-            </ListItem>
+            </ListItem> */}
           </List>
         </Collapse>
 
