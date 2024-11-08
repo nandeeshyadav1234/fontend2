@@ -19,13 +19,12 @@ const Navbar = () => {
   const handleLogout = () => {
     // Clear user token and data from localStorage or sessionStorage
     localStorage.removeItem('userToken'); // Or sessionStorage.removeItem('userToken')
-    localStorage.removeItem('userData'); // Optional: Clear other user data if stored
   
     console.log('User logged out');
   
     // Close the menu
     handleMenuClose();
-    navigate('/');
+    navigate('/signin');
     // Redirect to the login page or homepage
     // window.location.href = '/login'; // Adjust URL as needed
   };

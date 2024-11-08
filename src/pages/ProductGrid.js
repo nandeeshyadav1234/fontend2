@@ -21,7 +21,6 @@ const ProductGrid = () => {
     const fetchProperties = async () => {
       try {
         const response = await axios.get(`${apiUrl}products`);
-        console.log(response.data);
         setProperties(response.data); // Assuming the API response has the properties array
       } catch (error) {
         console.error('Error fetching properties:', error);

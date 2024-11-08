@@ -10,12 +10,16 @@ import {
 import { DataGrid } from '@mui/x-data-grid'; // Import DataGrid component
 import 'cropperjs/dist/cropper.css';
 import { Editor } from '@tinymce/tinymce-react';
-import FileUpload from '../../admin/components/imageUpload';
+import ImageUpload from '../../admin/components/imageUpload';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchProperties, addProperty, updateProperty, deleteProperty } from '../../features/properties/propertiesSlice';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
 const PropertiesTable = () => {
-  const [properties, setProperties] = useState([]);
+  const dispatch = useDispatch();
+  const properties = useSelector((state) => state.properties.items);
+  const propertiesStatus = useSelector((state) => state.properties.status);
   const [open, setOpen] = useState(false);
   const [currentProperty, setCurrentProperty] = useState(null);
 
@@ -23,6 +27,12 @@ const PropertiesTable = () => {
     user_id: '',
     name: '',
     latitude: '',
+    landDetails: {
+      nearestSchool: '',
+      nearestBusStop: '',
+      nearestRailway: '',
+      nearestHospital: '',
+    },
     longitude: '',
     type: '',
     amount: '',
@@ -47,72 +57,32 @@ const PropertiesTable = () => {
   const [images, setImages] = useState([]);
   const cropperRefs = useRef([]);
 
-  useEffect(() => {
-    fetchProperties();
-  }, []);
-
   const handleEditorChange = (content) => {
     setFormData((prevData) => ({
       ...prevData,
       description: content,
     }));
   };
-
-  const fetchProperties = async () => {
-    try {
-      const response = await axios.get(`${apiUrl}products`);
-      console.log(response.data);
-      setProperties(response.data);
-    } catch (error) {
-      console.error("Error fetching properties", error);
+  useEffect(() => {
+    if (propertiesStatus === 'idle') {
+      dispatch(fetchProperties());
     }
-  };
+  }, [propertiesStatus, dispatch]);
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
-  const handleImageUpload = (e) => {
-    const files = e.target.files;
-    const newImages = [...images];
-
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i];
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        newImages.push({
-          src: reader.result,
-          file: file,
-        });
-        setImages(newImages);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
 
   const handleSubmit = async () => {
-    try {
-      const userToken = localStorage.getItem('userToken');
-      if (currentProperty) {
-        await axios.put(`${apiUrl}properties/${currentProperty.id}`, formData, {
-          headers: { Authorization: `Bearer ${userToken}` }
-        });
-        setProperties((prevProperties) =>
-          prevProperties.map((property) =>
-            property.id === currentProperty.id ? { ...property, ...formData } : property
-          )
-        );
-      } else {
-        const response = await axios.post(`${apiUrl}properties`, formData, {
-          headers: { Authorization: `Bearer ${userToken}` }
-        });
-        setProperties((prevProperties) => [...prevProperties, response.data]);
-      }
-      setOpen(false);
-    } catch (error) {
-      console.error("Error saving property", error);
+    if (currentProperty) {
+      dispatch(updateProperty({ id: currentProperty.id, updatedData: formData }));
+    } else {
+      dispatch(addProperty(formData));
     }
+    setOpen(false);
   };
 
   const handleOpen = (property = null) => {
@@ -122,6 +92,9 @@ const PropertiesTable = () => {
       name: '',
       latitude: '',
       longitude: '',
+      landDetails: {
+        nearestSchool: '',
+      },
       type: '',
       amount: '',
       city: '',
@@ -148,22 +121,11 @@ const PropertiesTable = () => {
     // Implement your view logic here, for example, open a modal or navigate to a different page
     console.log('Viewing property:', property);
   };
-  const handleDelete = async (property) => {
-    try {
-      const userToken = localStorage.getItem('userToken');
-      // Make an API call to delete the property
-      await axios.delete(`${apiUrl}properties/${property.id}`, {
-        headers: { Authorization: `Bearer ${userToken}` }
-      });
-      // After successful deletion, remove the property from the state
-      setProperties((prevProperties) => prevProperties.filter(p => p.id !== property.id));
-      console.log('Property deleted:', property);
-    } catch (error) {
-      console.error('Error deleting property:', error);
-    }
+  const handleDelete = (property) => {
+    dispatch(deleteProperty(property.id));
   };
     
-  const handleClose = () => {
+ const handleClose = () => {
     setOpen(false);
     setCurrentProperty(null);
     setImages([]);
@@ -243,13 +205,12 @@ const PropertiesTable = () => {
         }}
       >
         <Typography variant="h6">{currentProperty ? 'Edit Property' : 'Add New Property'}</Typography>
-
+{console.log(formData)}
         {/* Two-column layout */}
         <Grid container spacing={3}>
           {/* Left Column */}
           <Grid item xs={12} sm={6}>
             <TextField label="Name" name="name" value={formData.name} onChange={handleChange} fullWidth sx={{ marginBottom: 2 }} />
-            <TextField label="Area Size" name="size" value={formData.size} onChange={handleChange} fullWidth sx={{ marginBottom: 2 }} />
             <FormControl fullWidth sx={{ marginBottom: 2 }}>
               <InputLabel>Type</InputLabel>
               <Select name="type" value={formData.type} onChange={handleChange}>
@@ -261,14 +222,15 @@ const PropertiesTable = () => {
             <TextField label="Amount" name="amount" value={formData.amount} onChange={handleChange} fullWidth sx={{ marginBottom: 2 }} />
             <TextField label="City" name="city" value={formData.city} onChange={handleChange} fullWidth sx={{ marginBottom: 2 }} />
             <TextField label="Postal Code" name="postalCode" value={formData.postalCode} onChange={handleChange} fullWidth sx={{ marginBottom: 2 }} />
-            <TextField label="Nearest School" name="nearestSchool" value={formData.nearestSchool} onChange={handleChange} fullWidth sx={{ marginBottom: 2 }} />
-            <TextField label="Nearest Bus Station" name="nearestBus" value={formData.nearestBus} onChange={handleChange} fullWidth sx={{ marginBottom: 2 }} />
+            <TextField label="Nearest School" name="nearestSchool" value={formData.landDetails.nearestSchool} onChange={handleChange} fullWidth sx={{ marginBottom: 2 }} />
+            <TextField label="Nearest Bus Station" name="nearestBus" value={formData.landDetails.nearestBusStop} onChange={handleChange} fullWidth sx={{ marginBottom: 2 }} />
+            <TextField label="Nearest Railway Station" name="nearestRailway" value={formData.landDetails.nearestRailway} onChange={handleChange} fullWidth sx={{ marginBottom: 2 }} />
             <FormControl fullWidth sx={{ marginBottom: 2 }}>
               <InputLabel>Electricity</InputLabel>
-              <Select name="electricity" value={formData.electricity} onChange={handleChange}>
+              <Select name="electricity" value={formData.landDetails.electricity} onChange={handleChange}>
                 <MenuItem value="No">No</MenuItem>
-                <MenuItem value="2Phase">2 Phase</MenuItem>
-                <MenuItem value="3Phase">3 Phase</MenuItem>
+                <MenuItem value="2 Phase">2 Phase</MenuItem>
+                <MenuItem value="3 Phase">3 Phase</MenuItem>
               </Select>
             </FormControl>
             
@@ -293,23 +255,23 @@ const PropertiesTable = () => {
             <FormControl fullWidth sx={{ marginBottom: 2 }}>
               <InputLabel>Availability</InputLabel>
               <Select name="availability" value={formData.availability} onChange={handleChange}>
-                <MenuItem value="Yes">Yes</MenuItem>
-                <MenuItem value="No">No</MenuItem>
+                <MenuItem value="Available">Yes</MenuItem>
+                <MenuItem value="Not Available">No</MenuItem>
               </Select>
             </FormControl>
-            <TextField label="Size" name="size" value={formData.size} onChange={handleChange} fullWidth sx={{ marginBottom: 2 }} />
-            <TextField label="Nearest Hospital" name="nearestHospital" value={formData.nearestHospital} onChange={handleChange} fullWidth sx={{ marginBottom: 2 }} />
+            <TextField label="Size" name="size" value={formData.landDetails.size} onChange={handleChange} fullWidth sx={{ marginBottom: 2 }} />
+            <TextField label="Nearest Hospital" name="nearestHospital" value={formData.landDetails.nearestHospital} onChange={handleChange} fullWidth sx={{ marginBottom: 2 }} />
 
             <FormControl fullWidth sx={{ marginBottom: 2 }}>
               <InputLabel>Tap Water</InputLabel>
-              <Select name="tapWater" value={formData.tapWater} onChange={handleChange}>
-                <MenuItem value="Yes">Yes</MenuItem>
-                <MenuItem value="No">No</MenuItem>
+              <Select name="tapWater" value={formData.landDetails.tapwater} onChange={handleChange}>
+                <MenuItem value="Available">Yes</MenuItem>
+                <MenuItem value="Not Available">No</MenuItem>
               </Select>
             </FormControl>
             <FormControl fullWidth sx={{ marginBottom: 2 }}>
             <InputLabel>Negotiable</InputLabel>
-            <Select name="negotiable" value={formData.negotiable} onChange={handleChange}>
+            <Select name="negotiable" value={formData.landDetails.negotiable} onChange={handleChange}>
             <MenuItem value="Yes">Yes</MenuItem>
             <MenuItem value="No">No</MenuItem>
             </Select>
@@ -317,10 +279,7 @@ const PropertiesTable = () => {
           </Grid>
         </Grid>
         <Grid item xs={12}>
-          <FileUpload
-            onUpload={handleImageUpload}  // Handle multiple image uploads
-            images={images}  // Pass images to the component for preview
-          />
+        <ImageUpload formData={formData} />
         </Grid>
         
         <Button variant="contained" color="primary" onClick={handleSubmit} sx={{ marginTop: 2 }}>

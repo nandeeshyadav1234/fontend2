@@ -44,11 +44,11 @@ const SignIn = () => {
         });
 
         const data = await response.json();
+        localStorage.setItem('user', JSON.stringify(data.user));
 
         if (response.ok) {
           // Handle successful login
           console.log('Login successful:', data);
-          localStorage.setItem('userToken', data.token); // Save token in localStorage
           navigate('/admin'); // Redirect to the admin page
         } else {
           // Display error message
